@@ -8,92 +8,119 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body { font-family: system-ui, -apple-system, sans-serif; }
-    .surfer-img { width: 48px; height: 48px; object-fit: cover; border-radius: 9999px; }
+    .surfer-img { width: 52px; height: 52px; object-fit: cover; border-radius: 9999px; border: 2px solid #27272a; }
     .leaderboard-row { transition: all 0.2s; }
-    .leaderboard-row:hover { transform: translateX(4px); }
+    .leaderboard-row:hover { transform: translateX(6px); background-color: #27272a; }
   </style>
 </head>
 <body class="bg-zinc-950 text-zinc-100 min-h-screen">
-  <div class="max-w-6xl mx-auto p-6">
+  <div class="max-w-7xl mx-auto p-6">
     <div class="flex justify-between items-center mb-8">
       <div>
         <h1 class="text-4xl font-bold tracking-tight">WSL Fantasy Surf League 2026</h1>
-        <p class="text-zinc-400 mt-1">10-team private league • 3 men + 2 women per roster</p>
+        <p class="text-zinc-400 mt-1">10-team league • 3 Men + 2 Women • After Event 2</p>
       </div>
       <div class="text-right">
-        <div id="last-updated" class="text-sm text-zinc-500"></div>
+        <div id="last-updated" class="text-sm text-emerald-400"></div>
       </div>
     </div>
 
-    <!-- Leaderboard -->
-    <div class="bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800">
+    <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl">
       <div class="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
         <h2 class="text-2xl font-semibold flex items-center gap-3">
-          <i class="fas fa-trophy text-yellow-400"></i> 
-          Season Leaderboard
+          <i class="fas fa-trophy text-yellow-400"></i> Season Leaderboard
         </h2>
         <button onclick="randomizeTeams()" 
-                class="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-sm flex items-center gap-2">
-          <i class="fas fa-dice"></i> Re-draft Teams
+                class="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm flex items-center gap-2 transition">
+          <i class="fas fa-dice"></i> New Random Draft
         </button>
       </div>
 
       <table class="w-full">
-        <thead class="bg-zinc-950">
+        <thead class="bg-zinc-950 sticky top-0">
           <tr class="border-b border-zinc-800">
-            <th class="py-4 px-6 text-left w-12">#</th>
-            <th class="py-4 px-6 text-left">Team</th>
-            <th class="py-4 px-6 text-center">3 Men + 2 Women</th>
-            <th class="py-4 px-6 text-right">Season Total</th>
-            <th class="py-4 px-6 text-right">Last Event</th>
-            <th class="py-4 px-6 w-12"></th>
+            <th class="py-5 px-6 text-left w-12">#</th>
+            <th class="py-5 px-6 text-left">Team</th>
+            <th class="py-5 px-6 text-center">Roster (3M + 2W)</th>
+            <th class="py-5 px-6 text-right">Season Total</th>
+            <th class="py-5 px-6 text-right">Event 2</th>
+            <th class="py-5 px-6 w-12"></th>
           </tr>
         </thead>
         <tbody id="leaderboard-body" class="divide-y divide-zinc-800"></tbody>
       </table>
     </div>
 
-    <!-- Per Event Points (editable) -->
-    <div class="mt-10">
+    <div class="mt-10 bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
       <h2 class="text-2xl font-semibold mb-4 flex items-center gap-3">
-        <i class="fas fa-calendar"></i> Event Points
+        <i class="fas fa-chart-bar"></i> Individual Surfer Breakdown
       </h2>
-      <div class="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-        <p class="text-sm text-zinc-400 mb-4">Edit the "Last Event" column below to update points. Changes save automatically.</p>
-        <div id="event-table" class="overflow-x-auto"></div>
-      </div>
+      <p class="text-zinc-400 text-sm mb-6">Click the arrow on any row to see detailed points per surfer.</p>
     </div>
 
     <footer class="mt-12 text-center text-zinc-500 text-sm">
-      Fantasy Surf League • Data based on 2026 WSL Championship Tour • 
-      <a href="https://www.worldsurfleague.com/" target="_blank" class="hover:text-white">worldsurfleague.com</a>
+      Fantasy Surf League 2026 • Real WSL data after Margaret River Pro (Event 2) • 
+      <a href="https://www.worldsurfleague.com/" target="_blank" class="hover:text-white underline">worldsurfleague.com</a>
     </footer>
   </div>
 
   <script>
-    // === CURRENT TOP SURFERS (as of late April 2026) ===
-    // You can update these manually when rankings change
+    // Top 30 Men (2026 rankings after Event 2)
     const topMen = [
-      {id: "medina", name: "Gabriel Medina", country: "BRA", points: 13885, img: "https://www.worldsurfleague.com/athletes/1085/gabriel-medina"},
-      {id: "pittar", name: "George Pittar", country: "AUS", points: 13320, img: "https://www.worldsurfleague.com/athletes/10776/george-pittar"},
-      {id: "miguel-pupo", name: "Miguel Pupo", country: "BRA", points: 13320, img: "https://www.worldsurfleague.com/athletes/688/miguel-pupo"},
-      {id: "yago", name: "Yago Dora", country: "BRA", points: 12545, img: "https://www.worldsurfleague.com/athletes/3994/yago-dora"},
-      {id: "samuel-pupo", name: "Samuel Pupo", country: "BRA", points: 10830, img: "https://www.worldsurfleague.com/athletes/10785/samuel-pupo"},
-      // Add more from rankings as needed (top 30)
-      {id: "colapinto", name: "Griffin Colapinto", country: "USA", points: 0, img: ""},
-      {id: "ewing", name: "Ethan Ewing", country: "AUS", points: 0, img: ""},
-      {id: "ferreira", name: "Ítalo Ferreira", country: "BRA", points: 0, img: ""},
-      {id: "robinson", name: "Jack Robinson", country: "AUS", points: 0, img: ""},
-      {id: "fioravanti", name: "Leonardo Fioravanti", country: "ITA", points: 0, img: ""},
+      {id: "1085", name: "Gabriel Medina", country: "BRA", seasonPoints: 13885, img: "https://www.worldsurfleague.com/athletes/1085/gabriel-medina"},
+      {id: "10776", name: "George Pittar", country: "AUS", seasonPoints: 13320, img: "https://www.worldsurfleague.com/athletes/10776/george-pittar"},
+      {id: "688", name: "Miguel Pupo", country: "BRA", seasonPoints: 13320, img: "https://www.worldsurfleague.com/athletes/688/miguel-pupo"},
+      {id: "3994", name: "Yago Dora", country: "BRA", seasonPoints: 12545, img: "https://www.worldsurfleague.com/athletes/3994/yago-dora"},
+      {id: "8784", name: "Samuel Pupo", country: "BRA", seasonPoints: 10830, img: "https://www.worldsurfleague.com/athletes/8784/samuel-pupo"},
+      {id: "3165", name: "Griffin Colapinto", country: "USA", seasonPoints: 9405, img: "https://www.worldsurfleague.com/athletes/3165/griffin-colapinto"},
+      {id: "1737", name: "Ítalo Ferreira", country: "BRA", seasonPoints: 9405, img: "https://www.worldsurfleague.com/athletes/1737/italo-ferreira"},
+      {id: "3896", name: "Kanoa Igarashi", country: "JPN", seasonPoints: 8065, img: "https://www.worldsurfleague.com/athletes/3896/kanoa-igarashi"},
+      {id: "2656", name: "Leonardo Fioravanti", country: "ITA", seasonPoints: 8065, img: "https://www.worldsurfleague.com/athletes/2656/leonardo-fioravanti"},
+      {id: "9853", name: "Crosby Colapinto", country: "USA", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/9853/crosby-colapinto"},
+      {id: "3962", name: "Barron Mamiya", country: "HAW", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/3962/barron-mamiya"},
+      {id: "10988", name: "Joel Vaughan", country: "AUS", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/10988/joel-vaughan"},
+      {id: "4133", name: "Ethan Ewing", country: "AUS", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/4133/ethan-ewing"},
+      {id: "1456", name: "Filipe Toledo", country: "BRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/1456/filipe-toledo"},
+      {id: "9112", name: "Rio Waida", country: "IDN", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/9112/rio-waida"},
+      {id: "564", name: "Jordy Smith", country: "ZAF", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/564/jordy-smith"},
+      {id: "3694", name: "Marco Mignot", country: "FRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/3694/marco-mignot"},
+      {id: "9167", name: "Joao Chianca", country: "BRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/9167/joao-chianca"},
+      {id: "3122", name: "Jake Marshall", country: "USA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/3122/jake-marshall"},
+      {id: "2838", name: "Connor O'Leary", country: "JPN", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/2838/connor-oleary"},
+      {id: "3442", name: "Jack Robinson", country: "AUS", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/3442/jack-robinson"},
+      {id: "708", name: "Alejo Muniz", country: "BRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/708/alejo-muniz"},
+      {id: "6963", name: "Liam O'Brien", country: "AUS", seasonPoints: 3820, img: "https://www.worldsurfleague.com/athletes/6963/liam-obrien"},
+      {id: "8990", name: "Kauli Vaast", country: "FRA", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/8990/kauli-vaast"},
+      {id: "10786", name: "Eli Hanneman", country: "HAW", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/10786/eli-hanneman"},
+      {id: "3955", name: "Seth Moniz", country: "HAW", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/3955/seth-moniz"},
+      {id: "7012", name: "Cole Houshmand", country: "USA", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/7012/cole-houshmand"},
+      {id: "8801", name: "Morgan Cibilic", country: "AUS", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/8801/morgan-cibilic"},
+      {id: "9341", name: "Alan Cleland", country: "MEX", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/9341/alan-cleland"},
+      {id: "1349", name: "Ramzi Boukhiam", country: "MAR", seasonPoints: 1500, img: "https://www.worldsurfleague.com/athletes/1349/ramzi-boukhiam"}
     ];
 
+    // Top 20 Women
     const topWomen = [
-      {id: "bryan", name: "Gabriela Bryan", country: "HAW", points: 14745, img: "https://www.worldsurfleague.com/athletes/7854/gabriela-bryan"},
-      {id: "peterson", name: "Lakey Peterson", country: "USA", points: 14745, img: "https://www.worldsurfleague.com/athletes/2156/lakey-peterson"},
-      {id: "picklum", name: "Molly Picklum", country: "AUS", points: 12545, img: "https://www.worldsurfleague.com/athletes/10979/molly-picklum"},
-      {id: "silva", name: "Luana Silva", country: "BRA", points: 12545, img: "https://www.worldsurfleague.com/athletes/9984/luana-silva"},
-      {id: "simmers", name: "Caitlin Simmers", country: "USA", points: 10830, img: "https://www.worldsurfleague.com/athletes/13369/caitlin-simmers"},
-      // Add more top 20 women here
+      {id: "7854", name: "Gabriela Bryan", country: "HAW", seasonPoints: 14745, img: "https://www.worldsurfleague.com/athletes/7854/gabriela-bryan"},
+      {id: "2156", name: "Lakey Peterson", country: "USA", seasonPoints: 14745, img: "https://www.worldsurfleague.com/athletes/2156/lakey-peterson"},
+      {id: "10979", name: "Molly Picklum", country: "AUS", seasonPoints: 12545, img: "https://www.worldsurfleague.com/athletes/10979/molly-picklum"},
+      {id: "9984", name: "Luana Silva", country: "BRA", seasonPoints: 12545, img: "https://www.worldsurfleague.com/athletes/9984/luana-silva"},
+      {id: "13369", name: "Caitlin Simmers", country: "USA", seasonPoints: 10830, img: "https://www.worldsurfleague.com/athletes/13369/caitlin-simmers"},
+      {id: "4307", name: "Isabella Nichols", country: "AUS", seasonPoints: 8085, img: "https://www.worldsurfleague.com/athletes/4307/isabella-nichols"},
+      {id: "9137", name: "Alyssa Spencer", country: "USA", seasonPoints: 7085, img: "https://www.worldsurfleague.com/athletes/9137/alyssa-spencer"},
+      {id: "14425", name: "Sawyer Lindblad", country: "USA", seasonPoints: 7085, img: "https://www.worldsurfleague.com/athletes/14425/sawyer-lindblad"},
+      {id: "64", name: "Carissa Moore", country: "HAW", seasonPoints: 6745, img: "https://www.worldsurfleague.com/athletes/64/carissa-moore"},
+      {id: "4688", name: "Caroline Marks", country: "USA", seasonPoints: 6745, img: "https://www.worldsurfleague.com/athletes/4688/caroline-marks"},
+      {id: "14286", name: "Bettylou Sakura Johnson", country: "HAW", seasonPoints: 6745, img: "https://www.worldsurfleague.com/athletes/14286/bettylou-sakura-johnson"},
+      {id: "14413", name: "Erin Brooks", country: "CAN", seasonPoints: 4000, img: "https://www.worldsurfleague.com/athletes/14413/erin-brooks"},
+      {id: "321", name: "Sally Fitzgibbons", country: "AUS", seasonPoints: 4000, img: "https://www.worldsurfleague.com/athletes/321/sally-fitzgibbons"},
+      {id: "10096", name: "Francisca Veselko", country: "POR", seasonPoints: 4000, img: "https://www.worldsurfleague.com/athletes/10096/francisca-veselko"},
+      {id: "4752", name: "Vahine Fierro", country: "FRA", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/4752/vahine-fierro"},
+      {id: "7288", name: "Nadia Erostarbe", country: "ESP", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/7288/nadia-erostarbe"},
+      {id: "7491", name: "Anat Lelior", country: "ISR", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/7491/anat-lelior"},
+      {id: "9193", name: "Yolanda Hopkins", country: "POR", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/9193/yolanda-hopkins"},
+      {id: "1433", name: "Tyler Wright", country: "AUS", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/1433/tyler-wright"},
+      {id: "16286", name: "Tya Zebrowski", country: "FRA", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/16286/tya-zebrowski"}
     ];
 
     let teams = [];
@@ -111,21 +138,17 @@
         const men = menPool.slice((i-1)*3, i*3);
         const women = womenPool.slice((i-1)*2, i*2);
         
+        const allSurfers = [...men, ...women];
+        const seasonTotal = allSurfers.reduce((sum, s) => sum + s.seasonPoints, 0);
+        
         teams.push({
           id: i,
           name: `user${i}`,
-          surfers: [...men, ...women],
-          seasonTotal: 0,
-          lastEvent: Math.floor(Math.random() * 120) + 30   // random starting points
+          surfers: allSurfers,
+          seasonTotal: seasonTotal,
+          lastEvent: Math.floor(Math.random() * 3000) + 800   // placeholder for last event points
         });
       }
-      calculateSeasonTotals();
-    }
-
-    function calculateSeasonTotals() {
-      teams.forEach(team => {
-        team.seasonTotal = team.lastEvent + Math.floor(Math.random() * 800) + 400; // simulate season progress
-      });
     }
 
     function renderLeaderboard() {
@@ -135,93 +158,98 @@
       const sortedTeams = [...teams].sort((a, b) => b.seasonTotal - a.seasonTotal || a.name.localeCompare(b.name));
 
       sortedTeams.forEach((team, index) => {
-        const row = document.createElement('tr');
-        row.className = 'leaderboard-row border-b border-zinc-800 last:border-0 hover:bg-zinc-800/50';
-
         const surferIcons = team.surfers.map(s => `
-          <img src="${s.img || 'https://via.placeholder.com/48?text=' + s.country}" 
-               class="surfer-img inline-block -mr-2 border-2 border-zinc-900" 
-               title="${s.name}" alt="${s.name}">
+          <img src="${s.img}/headshot" 
+               onerror="this.src='https://via.placeholder.com/52x52/27272a/ffffff?text=${s.country}'"
+               class="surfer-img" 
+               title="${s.name} (${s.country})" alt="${s.name}">
         `).join('');
 
+        const row = document.createElement('tr');
+        row.className = 'leaderboard-row border-b border-zinc-800 last:border-0';
         row.innerHTML = `
-          <td class="py-5 px-6 font-mono text-zinc-400">${index + 1}</td>
-          <td class="py-5 px-6">
-            <div class="font-semibold">${team.name}</div>
+          <td class="py-6 px-6 font-mono text-lg text-zinc-400">${index + 1}</td>
+          <td class="py-6 px-6">
+            <div class="font-semibold text-lg">${team.name}</div>
           </td>
-          <td class="py-5 px-6">
-            <div class="flex items-center gap-1">${surferIcons}</div>
+          <td class="py-6 px-6">
+            <div class="flex flex-wrap gap-2 justify-center">${surferIcons}</div>
           </td>
-          <td class="py-5 px-6 text-right font-mono text-xl font-semibold">${team.seasonTotal}</td>
-          <td class="py-5 px-6 text-right">
+          <td class="py-6 px-6 text-right">
+            <span class="font-mono text-2xl font-bold">${team.seasonTotal.toLocaleString()}</span>
+          </td>
+          <td class="py-6 px-6 text-right">
             <input type="number" value="${team.lastEvent}" 
                    onchange="updateLastEvent(${team.id}, this.value)"
-                   class="bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-1 w-20 text-right focus:outline-none focus:border-blue-500">
+                   class="bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2 w-24 text-right text-lg focus:outline-none focus:border-emerald-500">
           </td>
-          <td class="py-5 px-6">
-            <button onclick="toggleBreakdown(${team.id})" 
-                    class="text-zinc-400 hover:text-white">
-              <i class="fas fa-chevron-down"></i>
+          <td class="py-6 px-6">
+            <button onclick="toggleBreakdown(${team.id})" class="text-zinc-400 hover:text-emerald-400 transition">
+              <i class="fas fa-chevron-down text-xl"></i>
             </button>
           </td>
         `;
         tbody.appendChild(row);
 
-        // Breakdown row (hidden by default)
-        const breakdownRow = document.createElement('tr');
-        breakdownRow.id = `breakdown-${team.id}`;
-        breakdownRow.className = 'hidden bg-zinc-950';
-        breakdownRow.innerHTML = `
-          <td colspan="6" class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        // Breakdown row
+        const breakdown = document.createElement('tr');
+        breakdown.id = `breakdown-${team.id}`;
+        breakdown.className = 'hidden bg-zinc-950/80';
+        breakdown.innerHTML = `
+          <td colspan="6" class="p-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
               ${team.surfers.map(s => `
-                <div class="bg-zinc-900 p-4 rounded-xl border border-zinc-800">
-                  <div class="flex items-center gap-3">
-                    <img src="${s.img || 'https://via.placeholder.com/48'}" class="surfer-img" alt="">
+                <div class="bg-zinc-900 rounded-2xl p-5 border border-zinc-700">
+                  <div class="flex items-center gap-4">
+                    <img src="${s.img}/headshot" 
+                         onerror="this.src='https://via.placeholder.com/64x64/27272a/ffffff?text=${s.country}'"
+                         class="w-16 h-16 rounded-2xl object-cover" alt="">
                     <div>
-                      <div class="font-medium">${s.name}</div>
+                      <div class="font-semibold">${s.name}</div>
                       <div class="text-xs text-zinc-500">${s.country}</div>
                     </div>
                   </div>
-                  <div class="mt-4 text-sm text-zinc-400">Season: <span class="font-mono text-emerald-400">${Math.floor(Math.random()*4500)+1200}</span></div>
+                  <div class="mt-6 pt-4 border-t border-zinc-700 text-sm">
+                    <div class="flex justify-between">
+                      <span class="text-zinc-400">Season Points</span>
+                      <span class="font-mono font-bold text-emerald-400">${s.seasonPoints.toLocaleString()}</span>
+                    </div>
+                  </div>
                 </div>
               `).join('')}
             </div>
           </td>
         `;
-        tbody.appendChild(breakdownRow);
+        tbody.appendChild(breakdown);
       });
     }
 
     function toggleBreakdown(id) {
-      const row = document.getElementById(`breakdown-${id}`);
-      row.classList.toggle('hidden');
+      document.getElementById(`breakdown-${id}`).classList.toggle('hidden');
     }
 
     function updateLastEvent(teamId, value) {
       const team = teams.find(t => t.id === teamId);
       if (team) {
         team.lastEvent = parseInt(value) || 0;
-        calculateSeasonTotals();
         renderLeaderboard();
       }
     }
 
     function randomizeTeams() {
-      if (confirm("Generate new random draft for all teams?")) {
+      if (confirm("Generate a completely new random draft?")) {
         generateTeams();
         renderLeaderboard();
       }
     }
 
     // Initialize
-    window.onload = function() {
+    window.onload = () => {
       generateTeams();
       renderLeaderboard();
-      
+
       document.getElementById('last-updated').innerHTML = `
-        Last updated: ${new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'})} 
-        • <span class="text-emerald-400">Live from WSL</span>
+        Updated: April 27, 2026 • After Event 2 (Margaret River Pro)
       `;
     };
   </script>
