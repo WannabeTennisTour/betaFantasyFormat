@@ -1,257 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WSL Fantasy Surf League 2026 • Leaderboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; }
-    .surfer-img { width: 52px; height: 52px; object-fit: cover; border-radius: 9999px; border: 2px solid #27272a; }
-    .leaderboard-row { transition: all 0.2s; }
-    .leaderboard-row:hover { transform: translateX(6px); background-color: #27272a; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06202b">
+<title>Barrel League · Fantasy WSL 2026</title>
+<style>
+:root{--bg:#06202b;--card:#0d3140;--card2:#124256;--ink:#eaf7f9;--mut:#8fb4bf;--acc:#2ee6c5;--gold:#ffc84a;--bad:#ff7a7a;--line:#1b5167}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{background:radial-gradient(1200px 500px at 50% -10%,#0f4f63,transparent),#04141c;color:var(--ink);font:15px/1.4 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif;min-height:100vh;padding-bottom:84px}
+header{padding:calc(14px + env(safe-area-inset-top)) 16px 8px}
+.t{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:22px;letter-spacing:.3px}
+header p{color:var(--mut);font-size:12px;margin-top:2px}
+#lv{font-size:11px;font-weight:700;color:#04141c;background:var(--acc);padding:3px 9px;border-radius:99px;display:none;animation:p 1.6s infinite}
+@keyframes p{50%{opacity:.45}}
+#sub{position:sticky;top:0;z-index:5;display:flex;gap:6px;padding:8px 16px;background:rgba(4,20,28,.92);backdrop-filter:blur(8px)}
+#sub button{flex:1;padding:9px 0;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--mut);font-weight:600;font-size:14px}
+#sub button.on{background:var(--acc);color:#04141c;border-color:var(--acc)}
+main{padding:8px 14px;max-width:640px;margin:0 auto}
+.ev{margin:10px 0 22px}
+.eh{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#145a70,#0d3140);border-radius:16px;padding:12px}
+.eh .n{min-width:38px;height:38px;border-radius:12px;background:var(--gold);color:#3a2a00;font-weight:800;display:grid;place-items:center;font-size:17px}
+.eh h3{font-size:16px;line-height:1.2}.eh p{font-size:12px;color:var(--mut)}
+.eh>div{flex:1}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--card2);color:var(--mut);white-space:nowrap}
+.pill.live{background:var(--acc);color:#04141c}.pill.final{background:#1d4a3f;color:#8cf0d3}
+.ph{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.8px;margin:8px 4px 6px}
+.m{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:10px;overflow:hidden}
+.mh{font-size:11px;color:var(--mut);padding:8px 14px 0;text-transform:uppercase;letter-spacing:.7px}
+.sd{display:flex;align-items:center;gap:10px;padding:10px 14px;border-left:4px solid transparent}
+.sd+.sd{border-top:1px dashed var(--line)}
+.sd.w{border-left-color:var(--acc);background:linear-gradient(90deg,rgba(46,230,197,.12),transparent)}
+.sd.l{opacity:.55}
+.sd>div{flex:1;min-width:0}.sd b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sd small{color:var(--mut);font-size:11px}.em{font-style:normal;font-size:24px;width:32px;text-align:center}
+.sc{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums}.sd.w .sc{color:var(--acc)}
+.tbd b{color:var(--mut);font-weight:500}
+.det{display:none;grid-template-columns:1fr 1fr;gap:8px;padding:10px 10px 12px;background:#0a2833;border-top:1px solid var(--line)}
+.m.open .det{display:grid}
+.col h5{font-size:11px;color:var(--gold);margin:0 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.r{display:grid;grid-template-columns:22px 1fr auto;gap:2px 6px;align-items:center;font-size:12px;padding:3px 0}
+.r em{font-style:normal;color:var(--mut);font-size:10px;grid-column:2}.r b{grid-row:1/3;grid-column:3;font-variant-numeric:tabular-nums;font-size:12px}
+.r span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.av{display:inline-grid;place-items:center;border-radius:50%;background:#1b6a82 center/cover;color:#dff;font-weight:700;font-size:10px;flex:none;width:22px;height:22px}
+.r .av{grid-row:1/3}
+.tap{text-align:center;color:var(--mut);font-size:10px;padding:0 0 6px}
+.lb{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.lr{display:grid;grid-template-columns:28px 34px 1fr auto;gap:8px;align-items:center;padding:12px 14px}
+.lr+.lr{border-top:1px solid var(--line)}
+.lr .k{font-weight:800;color:var(--mut);text-align:center}.lr:nth-child(-n+3) .k{color:var(--gold)}
+.lr b{display:block}.lr small{color:var(--mut);font-size:11px}
+.rec{font-size:18px;font-weight:800;text-align:right}.rec small{display:block;font-weight:500}
+.hd{font-size:12px;color:var(--mut);padding:2px 4px 8px}
+.tm{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:14px;overflow:hidden}
+.tt{display:flex;align-items:center;gap:12px;padding:14px;background:linear-gradient(135deg,#145a70,#0d3140)}
+.tt .em{font-size:30px}.tt h3{font-size:17px}.tt small{color:var(--mut);font-size:12px}
+.pr{display:flex;align-items:center;gap:12px;padding:10px 14px}.pr+.pr{border-top:1px solid var(--line)}
+.pr .av{width:44px;height:44px;font-size:14px}.pr div{flex:1}.pr b{display:block}.pr small{color:var(--mut);font-size:12px}
+.pr span{font-weight:700;font-variant-numeric:tabular-nums}
+.champ{background:linear-gradient(135deg,#ffc84a,#ff9d3b);color:#3a2300;border-radius:16px;padding:14px;font-weight:800;text-align:center;margin:8px 0 14px}
+.bn{position:fixed;bottom:0;left:0;right:0;display:flex;background:rgba(6,32,43,.96);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:9}
+.bn button{flex:1;background:none;border:0;color:var(--mut);font-size:11px;padding:4px;font-weight:600}
+.bn button span{display:block;font-size:22px}.bn button.on{color:var(--acc)}
+footer{color:var(--mut);font-size:11px;text-align:center;padding:10px 20px}
+</style>
 </head>
-<body class="bg-zinc-950 text-zinc-100 min-h-screen">
-  <div class="max-w-7xl mx-auto p-6">
-    <div class="flex justify-between items-center mb-8">
-      <div>
-        <h1 class="text-4xl font-bold tracking-tight">WSL Fantasy Surf League 2026</h1>
-        <p class="text-zinc-400 mt-1">10-team league • 3 Men + 2 Women • After Event 2</p>
-      </div>
-      <div class="text-right">
-        <div id="last-updated" class="text-sm text-emerald-400"></div>
-      </div>
-    </div>
-
-    <div class="bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800 shadow-2xl">
-      <div class="p-6 border-b border-zinc-800 flex items-center justify-between bg-zinc-950">
-        <h2 class="text-2xl font-semibold flex items-center gap-3">
-          <i class="fas fa-trophy text-yellow-400"></i> Season Leaderboard
-        </h2>
-        <button onclick="randomizeTeams()" 
-                class="px-5 py-2.5 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm flex items-center gap-2 transition">
-          <i class="fas fa-dice"></i> New Random Draft
-        </button>
-      </div>
-
-      <table class="w-full">
-        <thead class="bg-zinc-950 sticky top-0">
-          <tr class="border-b border-zinc-800">
-            <th class="py-5 px-6 text-left w-12">#</th>
-            <th class="py-5 px-6 text-left">Team</th>
-            <th class="py-5 px-6 text-center">Roster (3M + 2W)</th>
-            <th class="py-5 px-6 text-right">Season Total</th>
-            <th class="py-5 px-6 text-right">Event 2</th>
-            <th class="py-5 px-6 w-12"></th>
-          </tr>
-        </thead>
-        <tbody id="leaderboard-body" class="divide-y divide-zinc-800"></tbody>
-      </table>
-    </div>
-
-    <div class="mt-10 bg-zinc-900 rounded-3xl p-6 border border-zinc-800">
-      <h2 class="text-2xl font-semibold mb-4 flex items-center gap-3">
-        <i class="fas fa-chart-bar"></i> Individual Surfer Breakdown
-      </h2>
-      <p class="text-zinc-400 text-sm mb-6">Click the arrow on any row to see detailed points per surfer.</p>
-    </div>
-
-    <footer class="mt-12 text-center text-zinc-500 text-sm">
-      Fantasy Surf League 2026 • Real WSL data after Margaret River Pro (Event 2) • 
-      <a href="https://www.worldsurfleague.com/" target="_blank" class="hover:text-white underline">worldsurfleague.com</a>
-    </footer>
-  </div>
-
-  <script>
-    // Top 30 Men (2026 rankings after Event 2)
-    const topMen = [
-      {id: "1085", name: "Gabriel Medina", country: "BRA", seasonPoints: 13885, img: "https://www.worldsurfleague.com/athletes/1085/gabriel-medina"},
-      {id: "10776", name: "George Pittar", country: "AUS", seasonPoints: 13320, img: "https://www.worldsurfleague.com/athletes/10776/george-pittar"},
-      {id: "688", name: "Miguel Pupo", country: "BRA", seasonPoints: 13320, img: "https://www.worldsurfleague.com/athletes/688/miguel-pupo"},
-      {id: "3994", name: "Yago Dora", country: "BRA", seasonPoints: 12545, img: "https://www.worldsurfleague.com/athletes/3994/yago-dora"},
-      {id: "8784", name: "Samuel Pupo", country: "BRA", seasonPoints: 10830, img: "https://www.worldsurfleague.com/athletes/8784/samuel-pupo"},
-      {id: "3165", name: "Griffin Colapinto", country: "USA", seasonPoints: 9405, img: "https://www.worldsurfleague.com/athletes/3165/griffin-colapinto"},
-      {id: "1737", name: "Ítalo Ferreira", country: "BRA", seasonPoints: 9405, img: "https://www.worldsurfleague.com/athletes/1737/italo-ferreira"},
-      {id: "3896", name: "Kanoa Igarashi", country: "JPN", seasonPoints: 8065, img: "https://www.worldsurfleague.com/athletes/3896/kanoa-igarashi"},
-      {id: "2656", name: "Leonardo Fioravanti", country: "ITA", seasonPoints: 8065, img: "https://www.worldsurfleague.com/athletes/2656/leonardo-fioravanti"},
-      {id: "9853", name: "Crosby Colapinto", country: "USA", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/9853/crosby-colapinto"},
-      {id: "3962", name: "Barron Mamiya", country: "HAW", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/3962/barron-mamiya"},
-      {id: "10988", name: "Joel Vaughan", country: "AUS", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/10988/joel-vaughan"},
-      {id: "4133", name: "Ethan Ewing", country: "AUS", seasonPoints: 5745, img: "https://www.worldsurfleague.com/athletes/4133/ethan-ewing"},
-      {id: "1456", name: "Filipe Toledo", country: "BRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/1456/filipe-toledo"},
-      {id: "9112", name: "Rio Waida", country: "IDN", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/9112/rio-waida"},
-      {id: "564", name: "Jordy Smith", country: "ZAF", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/564/jordy-smith"},
-      {id: "3694", name: "Marco Mignot", country: "FRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/3694/marco-mignot"},
-      {id: "9167", name: "Joao Chianca", country: "BRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/9167/joao-chianca"},
-      {id: "3122", name: "Jake Marshall", country: "USA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/3122/jake-marshall"},
-      {id: "2838", name: "Connor O'Leary", country: "JPN", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/2838/connor-oleary"},
-      {id: "3442", name: "Jack Robinson", country: "AUS", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/3442/jack-robinson"},
-      {id: "708", name: "Alejo Muniz", country: "BRA", seasonPoints: 4320, img: "https://www.worldsurfleague.com/athletes/708/alejo-muniz"},
-      {id: "6963", name: "Liam O'Brien", country: "AUS", seasonPoints: 3820, img: "https://www.worldsurfleague.com/athletes/6963/liam-obrien"},
-      {id: "8990", name: "Kauli Vaast", country: "FRA", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/8990/kauli-vaast"},
-      {id: "10786", name: "Eli Hanneman", country: "HAW", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/10786/eli-hanneman"},
-      {id: "3955", name: "Seth Moniz", country: "HAW", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/3955/seth-moniz"},
-      {id: "7012", name: "Cole Houshmand", country: "USA", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/7012/cole-houshmand"},
-      {id: "8801", name: "Morgan Cibilic", country: "AUS", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/8801/morgan-cibilic"},
-      {id: "9341", name: "Alan Cleland", country: "MEX", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/9341/alan-cleland"},
-      {id: "1349", name: "Ramzi Boukhiam", country: "MAR", seasonPoints: 1500, img: "https://www.worldsurfleague.com/athletes/1349/ramzi-boukhiam"}
-    ];
-
-    // Top 20 Women
-    const topWomen = [
-      {id: "7854", name: "Gabriela Bryan", country: "HAW", seasonPoints: 14745, img: "https://www.worldsurfleague.com/athletes/7854/gabriela-bryan"},
-      {id: "2156", name: "Lakey Peterson", country: "USA", seasonPoints: 14745, img: "https://www.worldsurfleague.com/athletes/2156/lakey-peterson"},
-      {id: "10979", name: "Molly Picklum", country: "AUS", seasonPoints: 12545, img: "https://www.worldsurfleague.com/athletes/10979/molly-picklum"},
-      {id: "9984", name: "Luana Silva", country: "BRA", seasonPoints: 12545, img: "https://www.worldsurfleague.com/athletes/9984/luana-silva"},
-      {id: "13369", name: "Caitlin Simmers", country: "USA", seasonPoints: 10830, img: "https://www.worldsurfleague.com/athletes/13369/caitlin-simmers"},
-      {id: "4307", name: "Isabella Nichols", country: "AUS", seasonPoints: 8085, img: "https://www.worldsurfleague.com/athletes/4307/isabella-nichols"},
-      {id: "9137", name: "Alyssa Spencer", country: "USA", seasonPoints: 7085, img: "https://www.worldsurfleague.com/athletes/9137/alyssa-spencer"},
-      {id: "14425", name: "Sawyer Lindblad", country: "USA", seasonPoints: 7085, img: "https://www.worldsurfleague.com/athletes/14425/sawyer-lindblad"},
-      {id: "64", name: "Carissa Moore", country: "HAW", seasonPoints: 6745, img: "https://www.worldsurfleague.com/athletes/64/carissa-moore"},
-      {id: "4688", name: "Caroline Marks", country: "USA", seasonPoints: 6745, img: "https://www.worldsurfleague.com/athletes/4688/caroline-marks"},
-      {id: "14286", name: "Bettylou Sakura Johnson", country: "HAW", seasonPoints: 6745, img: "https://www.worldsurfleague.com/athletes/14286/bettylou-sakura-johnson"},
-      {id: "14413", name: "Erin Brooks", country: "CAN", seasonPoints: 4000, img: "https://www.worldsurfleague.com/athletes/14413/erin-brooks"},
-      {id: "321", name: "Sally Fitzgibbons", country: "AUS", seasonPoints: 4000, img: "https://www.worldsurfleague.com/athletes/321/sally-fitzgibbons"},
-      {id: "10096", name: "Francisca Veselko", country: "POR", seasonPoints: 4000, img: "https://www.worldsurfleague.com/athletes/10096/francisca-veselko"},
-      {id: "4752", name: "Vahine Fierro", country: "FRA", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/4752/vahine-fierro"},
-      {id: "7288", name: "Nadia Erostarbe", country: "ESP", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/7288/nadia-erostarbe"},
-      {id: "7491", name: "Anat Lelior", country: "ISR", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/7491/anat-lelior"},
-      {id: "9193", name: "Yolanda Hopkins", country: "POR", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/9193/yolanda-hopkins"},
-      {id: "1433", name: "Tyler Wright", country: "AUS", seasonPoints: 3000, img: "https://www.worldsurfleague.com/athletes/1433/tyler-wright"},
-      {id: "16286", name: "Tya Zebrowski", country: "FRA", seasonPoints: 2000, img: "https://www.worldsurfleague.com/athletes/16286/tya-zebrowski"}
-    ];
-
-    let teams = [];
-
-    function shuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
-    }
-
-    function generateTeams() {
-      const menPool = shuffle([...topMen]);
-      const womenPool = shuffle([...topWomen]);
-      
-      teams = [];
-      for (let i = 1; i <= 10; i++) {
-        const men = menPool.slice((i-1)*3, i*3);
-        const women = womenPool.slice((i-1)*2, i*2);
-        
-        const allSurfers = [...men, ...women];
-        const seasonTotal = allSurfers.reduce((sum, s) => sum + s.seasonPoints, 0);
-        
-        teams.push({
-          id: i,
-          name: `user${i}`,
-          surfers: allSurfers,
-          seasonTotal: seasonTotal,
-          lastEvent: Math.floor(Math.random() * 3000) + 800   // placeholder for last event points
-        });
-      }
-    }
-
-    function renderLeaderboard() {
-      const tbody = document.getElementById('leaderboard-body');
-      tbody.innerHTML = '';
-
-      const sortedTeams = [...teams].sort((a, b) => b.seasonTotal - a.seasonTotal || a.name.localeCompare(b.name));
-
-      sortedTeams.forEach((team, index) => {
-        const surferIcons = team.surfers.map(s => `
-          <img src="${s.img}/headshot" 
-               onerror="this.src='https://via.placeholder.com/52x52/27272a/ffffff?text=${s.country}'"
-               class="surfer-img" 
-               title="${s.name} (${s.country})" alt="${s.name}">
-        `).join('');
-
-        const row = document.createElement('tr');
-        row.className = 'leaderboard-row border-b border-zinc-800 last:border-0';
-        row.innerHTML = `
-          <td class="py-6 px-6 font-mono text-lg text-zinc-400">${index + 1}</td>
-          <td class="py-6 px-6">
-            <div class="font-semibold text-lg">${team.name}</div>
-          </td>
-          <td class="py-6 px-6">
-            <div class="flex flex-wrap gap-2 justify-center">${surferIcons}</div>
-          </td>
-          <td class="py-6 px-6 text-right">
-            <span class="font-mono text-2xl font-bold">${team.seasonTotal.toLocaleString()}</span>
-          </td>
-          <td class="py-6 px-6 text-right">
-            <input type="number" value="${team.lastEvent}" 
-                   onchange="updateLastEvent(${team.id}, this.value)"
-                   class="bg-zinc-800 border border-zinc-700 rounded-xl px-4 py-2 w-24 text-right text-lg focus:outline-none focus:border-emerald-500">
-          </td>
-          <td class="py-6 px-6">
-            <button onclick="toggleBreakdown(${team.id})" class="text-zinc-400 hover:text-emerald-400 transition">
-              <i class="fas fa-chevron-down text-xl"></i>
-            </button>
-          </td>
-        `;
-        tbody.appendChild(row);
-
-        // Breakdown row
-        const breakdown = document.createElement('tr');
-        breakdown.id = `breakdown-${team.id}`;
-        breakdown.className = 'hidden bg-zinc-950/80';
-        breakdown.innerHTML = `
-          <td colspan="6" class="p-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-              ${team.surfers.map(s => `
-                <div class="bg-zinc-900 rounded-2xl p-5 border border-zinc-700">
-                  <div class="flex items-center gap-4">
-                    <img src="${s.img}/headshot" 
-                         onerror="this.src='https://via.placeholder.com/64x64/27272a/ffffff?text=${s.country}'"
-                         class="w-16 h-16 rounded-2xl object-cover" alt="">
-                    <div>
-                      <div class="font-semibold">${s.name}</div>
-                      <div class="text-xs text-zinc-500">${s.country}</div>
-                    </div>
-                  </div>
-                  <div class="mt-6 pt-4 border-t border-zinc-700 text-sm">
-                    <div class="flex justify-between">
-                      <span class="text-zinc-400">Season Points</span>
-                      <span class="font-mono font-bold text-emerald-400">${s.seasonPoints.toLocaleString()}</span>
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </td>
-        `;
-        tbody.appendChild(breakdown);
-      });
-    }
-
-    function toggleBreakdown(id) {
-      document.getElementById(`breakdown-${id}`).classList.toggle('hidden');
-    }
-
-    function updateLastEvent(teamId, value) {
-      const team = teams.find(t => t.id === teamId);
-      if (team) {
-        team.lastEvent = parseInt(value) || 0;
-        renderLeaderboard();
-      }
-    }
-
-    function randomizeTeams() {
-      if (confirm("Generate a completely new random draft?")) {
-        generateTeams();
-        renderLeaderboard();
-      }
-    }
-
-    // Initialize
-    window.onload = () => {
-      generateTeams();
-      renderLeaderboard();
-
-      document.getElementById('last-updated').innerHTML = `
-        Updated: April 27, 2026 • After Event 2 (Margaret River Pro)
-      `;
-    };
-  </script>
+<body>
+<header><div class="t"><h1>🌊 Barrel League</h1><span id="lv">● LIVE</span></div><p>2026 Fantasy WSL Championship Tour · BETA</p></header>
+<nav id="sub"></nav>
+<main id="app"></main>
+<footer>Fantasy score = WSL event points of each team's 3 men + 2 women. Higher total wins the matchup. Playoffs seeded by W-L, then points for.</footer>
+<nav class="bn">
+<button data-t="events"><span>🏄</span>Events</button>
+<button data-t="board"><span>🏆</span>Leaderboard</button>
+<button data-t="teams"><span>👥</span>Teams</button>
+</nav>
+<script>
+/* ============================================================
+   LIVE UPDATES: the page re-checks results.json (same folder) every 60s.
+   Format: {"status":{"11":"live"},"placements":{"11":{"Griffin Colapinto":3,"Molly Picklum":9}}}
+   Placement codes: 1,2,3,5,9,17,25,33 (finish tier), "I" = injured, "X" = did not compete.
+   Without that file the page uses the data embedded below.
+   ============================================================ */
+const T=[['Dora the Xplorers','🧭'],['Colapinto Colada','🍍'],['Pupo Platter','🍽️'],['Mamiya Mia!','🎶'],['Simmers Down Now','🔥'],['Gabe Force Winds','🌪️'],['Marks the Spot','🏴‍☠️'],['Dill With It','🥒']];
+const E=[[1,'Rip Curl Pro Bells Beach','Bells Beach, Australia','2026-04-01','2026-04-11'],[2,'Margaret River Pro','Margaret River, Australia','2026-04-16','2026-04-26'],[3,'Bonsoy Gold Coast Pro','Gold Coast, Australia','2026-05-02','2026-05-12'],[4,'Corona Cero New Zealand Pro','Raglan, New Zealand','2026-05-15','2026-05-25'],[5,'Surf City El Salvador Pro','Punta Roca, El Salvador','2026-06-05','2026-06-15'],[6,'VIVO Rio Pro','Saquarema, Brazil','2026-06-19','2026-06-27'],[7,'Outerknown Tahiti Pro','Teahupo\'o, Tahiti','2026-08-08','2026-08-18'],[8,'Fiji Pro','Cloudbreak, Fiji','2026-08-25','2026-09-04'],[9,'Lexus Trestles Pro','Lower Trestles, USA','2026-09-11','2026-09-20'],[10,'MEO Rip Curl Pro Portugal','Supertubos, Portugal','2026-10-16','2026-10-25'],[11,'Philippines Pro','Cloud 9, Siargao','2026-10-31','2026-11-10'],[12,'Lexus Pipe Masters','Banzai Pipeline, Hawaii','2026-12-08','2026-12-20']];
+// [name, gender, team#, finishes for events 1..10]
+const S=[['Yago Dora','m',0,[2,5,17,3,9,1,17,5,3,3]],['Kauli Vaast','m',0,[17,17,5,17,5,5,9,5,9,9]],['Seth Moniz','m',0,[17,17,17,17,17,33,1,9,17,5]],['Erin Brooks','w',0,[9,9,17,9,17,9,1,1,1,5]],['Lakey Peterson','w',0,[5,1,5,9,9,9,9,5,9,3]],
+['Griffin Colapinto','m',1,[3,9,17,3,17,17,2,3,9,1]],['Joao Chianca','m',1,[17,9,17,17,9,3,9,17,17,17]],['Callum Robson','m',1,[33,33,9,17,5,9,17,5,5,17]],['Tyler Wright','w',1,[9,'I',9,5,2,17,17,17,9,9]],['Sawyer Lindblad','w',1,[17,3,3,2,9,1,9,9,3,9]],
+['Italo Ferreira','m',2,[9,3,9,1,2,9,3,9,9,3]],['Miguel Pupo','m',2,[1,9,9,5,17,5,9,9,1,9]],['Jake Marshall','m',2,[9,17,9,17,17,17,17,9,5,17]],['Isabella Nichols','w',2,[3,9,9,9,17,9,3,2,17,9]],['Luana Silva','w',2,[5,2,2,9,5,5,9,9,5,9]],
+['Jack Robinson','m',3,[17,9,9,9,9,9,5,17,9,9]],['Barron Mamiya','m',3,[5,17,17,17,9,17,9,9,17,'X']],['Liam O\'Brien','m',3,[33,9,3,9,9,9,9,17,9,17]],['Bettylou Sakura Johnson','w',3,[5,9,9,3,9,17,17,5,17,3]],['Nadia Erostarbe','w',3,[9,17,3,17,9,3,5,9,17,9]],
+['Ethan Ewing','m',4,[17,5,1,17,17,3,5,17,9,5]],['Connor O\'Leary','m',4,[17,9,2,17,17,17,9,5,17,9]],['George Pittar','m',4,[9,1,9,17,17,9,5,17,17,17]],['Caitlin Simmers','w',4,[5,3,5,9,5,5,5,'I',9,2]],['Yolanda Hopkins','w',4,[17,9,9,17,9,17,3,5,9,9]],
+['Gabriel Medina','m',5,[3,2,9,9,3,17,17,2,17,2]],['Cole Houshmand','m',5,[17,17,17,5,17,17,17,1,3,17]],['Morgan Cibilic','m',5,[17,17,17,2,17,5,17,9,17,5]],['Gabriela Bryan','w',5,[1,5,5,5,3,5,9,9,2,9]],['Anat Lelior','w',5,[9,17,17,17,5,17,2,17,17,'X']],
+['Jordy Smith','m',6,[9,17,17,17,'I','I','I','I','I','X']],['Leo Fioravanti','m',6,[5,9,5,9,1,2,17,3,17,9]],['Samuel Pupo','m',6,[5,3,5,17,9,5,17,9,17,17]],['Caroline Marks','w',6,[9,5,9,5,5,3,9,9,9,9]],['Alyssa Spencer','w',6,[3,17,17,3,17,17,9,17,17,'X']],
+['Kanoa Igarashi','m',7,[5,9,17,9,3,9,17,9,2,9]],['Filipe Toledo','m',7,[9,17,3,5,17,17,17,17,17,9]],['Marco Mignot','m',7,[9,17,9,9,5,9,17,17,5,17]],['Molly Picklum','w',7,[2,5,5,5,3,9,5,9,3,1]],['Stephanie Gilmore','w',7,[17,17,1,9,17,17,17,17,17,'X']]
+].map(a=>({n:a[0],g:a[1],t:a[2],p:a[3]}));
+const R=T.map((_,i)=>S.filter(s=>s.t===i));
+const MR={1:10000,2:7800,3:6085,5:4745,9:3320,17:1000,33:500,I:500},WR={...MR,9:2000,I:1000},MP={...MR,9:2500,I:1000},WP={...MR,9:2000,I:2000},MF={1:15000,2:11700,3:9125,5:7115,9:4980,17:3240,25:1500,33:750,I:750},WF={...MF,9:3000,17:1500,I:1500};
+const ORD={1:'1st',2:'2nd',3:'3rd',5:'5th',9:'9th',17:'17th',25:'25th',33:'33rd',I:'INJ',X:'CUT'};
+const ST={};
+const pts=(s,ev)=>{const p=s.p[ev-1];if(p==null)return null;if(p==='X')return 0;const m=ev===12?(s.g==='m'?MF:WF):ev>9?(s.g==='m'?MP:WP):(s.g==='m'?MR:WR);return m[p]??0};
+const ts=(t,ev)=>{const v=R[t].map(s=>pts(s,ev));return v.every(x=>x==null)?null:v.reduce((a,b)=>a+(b||0),0)};
+const stat=ev=>{if(ST[ev])return ST[ev];const e=E[ev-1],n=new Date();return n>new Date(e[4]+'T23:59:59')?'final':n>=new Date(e[3]+'T00:00:00')?'live':'upcoming'};
+const pairs=r=>{let a=[0,1,2,3,4,5,6,7];for(let i=0;i<r;i++)a=[a[0],a[7],...a.slice(1,7)];return[0,1,2,3].map(i=>[a[i],a[7-i]])};
+let M={};
+function mk(ev,a,b,label,ta,tb){const sa=a==null?null:ts(a,ev),sb=b==null?null:ts(b,ev),fin=stat(ev)==='final'&&sa!=null&&sb!=null;let w=null,l=null;
+ if(fin){const top=t=>Math.max(...R[t].map(s=>pts(s,ev)||0));w=sa>sb?a:sb>sa?b:top(a)>=top(b)?a:b;l=w===a?b:a}
+ return{a,b,sa,sb,w,l,label,ta,tb,fin}}
+function standings(upto){const r=T.map((_,t)=>({t,w:0,l:0,pf:0}));
+ for(let ev=1;ev<=upto;ev++)(M[ev]||[]).forEach(m=>{if(!m.fin)return;r[m.w].w++;r[m.l].l++;r[m.a].pf+=m.sa;r[m.b].pf+=m.sb});
+ return r.sort((x,y)=>y.w-x.w||y.pf-x.pf)}
+function build(){M={};
+ for(let ev=1;ev<=9;ev++)M[ev]=pairs(ev<=7?ev-1:ev-8).map((p,i)=>mk(ev,p[0],p[1],'Matchup '+(i+1)));
+ const sd=standings(9).map(x=>x.t);
+ M[10]=[[0,7],[1,6],[2,5],[3,4]].map((p,i)=>mk(10,sd[p[0]],sd[p[1]],`Quarterfinal ${i+1} · Seed ${p[0]+1} vs ${p[1]+1}`));
+ const w=M[10].map((m,i)=>m.fin?m.w:null),l=M[10].map(m=>m.fin?m.l:null),q=i=>'Winner QF'+(i+1),ql=i=>'Loser QF'+(i+1);
+ M[11]=[mk(11,w[0],w[3],'Semifinal 1',q(0),q(3)),mk(11,w[1],w[2],'Semifinal 2',q(1),q(2)),mk(11,l[0],l[3],'Consolation 1',ql(0),ql(3)),mk(11,l[1],l[2],'Consolation 2',ql(1),ql(2))];
+ const w2=M[11].map(m=>m.fin?m.w:null),l2=M[11].map(m=>m.fin?m.l:null);
+ M[12]=[mk(12,w2[0],w2[1],'🏆 Championship Final','Winner SF1','Winner SF2'),mk(12,l2[0],l2[1],'3rd Place','Loser SF1','Loser SF2'),mk(12,w2[2],w2[3],'5th Place','Winner Cons. 1','Winner Cons. 2'),mk(12,l2[2],l2[3],'7th Place','Loser Cons. 1','Loser Cons. 2')]}
+/*UI*/
+const $=s=>document.querySelector(s);
+let PIC={};try{PIC=JSON.parse(localStorage.getItem('wslpics')||'{}')}catch(e){}
+let tab='events',sub='current';const open=new Set();
+const fmt=d=>new Date(d+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+const ini=n=>{const w=n.split(' ');return w[0][0]+w[w.length-1][0]};
+const sh=n=>{const w=n.split(' ');return w[0][0]+'. '+w[w.length-1]};
+const av=(s,z)=>`<span class="av" data-n="${s.n}"${z?` style="width:${z}px;height:${z}px"`:''}>${ini(s.n)}</span>`;
+const cur=()=>{const e=E.find(e=>stat(e[0])!=='final');return e?e[0]:12};
+const phase=ev=>ev<=9?`Regular season · Round-robin ${ev<=7?'week '+ev:'rematch'}`:ev===10?'Playoffs · Quarterfinals':ev===11?'Playoffs · Semifinals & consolation':'Playoffs · Championship Final · 1.5× points';
+function side(m,k,t,sc,tbd){if(t==null)return`<div class="sd tbd"><i class="em">❔</i><div><b>${tbd||'TBD'}</b></div></div>`;
+ return`<div class="sd ${m.fin?(m.w===t?'w':'l'):''}"><i class="em">${T[t][1]}</i><div><b>${T[t][0]}</b><small>Team ${t+1}</small></div><span class="sc">${sc==null?'–':sc.toLocaleString()}</span></div>`}
+function det(t,ev){return`<div class="col"><h5>${T[t][0]}</h5>${R[t].map(s=>{const p=s.p[ev-1],v=pts(s,ev);return`<div class="r">${av(s)}<span>${sh(s.n)}</span><em>${p==null?'–':ORD[p]}</em><b>${v==null?'':v.toLocaleString()}</b></div>`}).join('')}</div>`}
+function mc(m,ev,i){const k=ev+'-'+i,can=m.a!=null&&m.b!=null;
+ return`<div class="m ${open.has(k)?'open':''}" id="m${k}" ${can?`onclick="tg('${k}')"`:''}><div class="mh">${m.label}</div>${side(m,k,m.a,m.sa,m.ta)}${side(m,k,m.b,m.sb,m.tb)}${can?`<div class="det">${det(m.a,ev)}${det(m.b,ev)}</div><div class="tap">tap for surfer breakdown</div>`:''}</div>`}
+function tg(k){open.has(k)?open.delete(k):open.add(k);$('#m'+k).classList.toggle('open')}
+function evh(ev){const e=E[ev-1],s=stat(ev);
+ return`<section class="ev"><div class="eh"><span class="n">${ev}</span><div><h3>${e[1]}</h3><p>${e[2]} · ${fmt(e[3])}–${fmt(e[4])}</p></div><span class="pill ${s}">${s==='live'?'● LIVE':s==='final'?'Final':'Upcoming'}</span></div><div class="ph">${phase(ev)}</div>${M[ev].map((m,i)=>mc(m,ev,i)).join('')}</section>`}
+function viewEvents(){const c=cur(),all=E.map(e=>e[0]);let ids;
+ if(sub==='past')ids=all.filter(e=>stat(e)==='final'&&e!==c).reverse();else if(sub==='future')ids=all.filter(e=>e>c);else ids=[c];
+ const ch=M[12][0];const champ=ch.fin?`<div class="champ">🏆 ${T[ch.w][1]} ${T[ch.w][0]} — 2026 Champions</div>`:'';
+ return champ+(ids.map(evh).join('')||'<p class="hd">Nothing here yet.</p>')}
+function viewBoard(){const L=standings(12),seed=standings(9).map(x=>x.t);
+ return`<p class="hd">Season record (all events incl. playoffs) · tiebreak: points for</p><div class="lb">${L.map((x,i)=>`<div class="lr"><span class="k">${i+1}</span><i class="em">${T[x.t][1]}</i><div><b>${T[x.t][0]}</b><small>Team ${x.t+1} · Reg. season seed #${seed.indexOf(x.t)+1} · ${x.pf.toLocaleString()} pts</small></div><div class="rec">${x.w}-${x.l}</div></div>`).join('')}</div>`}
+function viewTeams(){return T.map((t,i)=>`<div class="tm"><div class="tt"><i class="em">${t[1]}</i><div><h3>${t[0]}</h3><small>Team ${i+1}</small></div></div>${R[i].map(s=>`<div class="pr">${av(s,44)}<div><b>${s.n}</b><small>${s.g==='m'?"Men's CT":"Women's CT"}</small></div><span>${E.reduce((a,e)=>a+(pts(s,e[0])||0),0).toLocaleString()}</span></div>`).join('')}</div>`).join('')}
+function render(){build();const live=E.some(e=>stat(e[0])==='live');$('#lv').style.display=live?'inline-block':'none';
+ $('#sub').style.display=tab==='events'?'flex':'none';
+ $('#sub').innerHTML=['past','current','future'].map(s=>`<button class="${sub===s?'on':''}" onclick="sub='${s}';render();scrollTo(0,0)">${s[0].toUpperCase()+s.slice(1)}</button>`).join('');
+ document.querySelectorAll('.bn button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+ $('#app').innerHTML=tab==='events'?viewEvents():tab==='board'?viewBoard():viewTeams();paint()}
+function paint(){document.querySelectorAll('.av[data-n]').forEach(a=>{const u=PIC[a.dataset.n];if(u){a.style.backgroundImage=`url(${u})`;a.textContent=''}})}
+const nrm=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+async function pics(){for(const s of S){if(PIC[s.n]!==undefined)continue;
+ try{const r=await fetch('https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrlimit=1&prop=pageimages&piprop=thumbnail&pithumbsize=200&gsrsearch='+encodeURIComponent(s.n+' surfer'));
+  const j=await r.json(),pg=j.query&&Object.values(j.query.pages)[0],w=s.n.split(' '),ti=pg?nrm(pg.title):'';
+  PIC[s.n]=pg&&pg.thumbnail&&ti.includes(nrm(w[w.length-1]))&&ti.includes(nrm(w[0]).slice(0,3))?pg.thumbnail.source:''}catch(e){PIC[s.n]=''}
+ try{localStorage.setItem('wslpics',JSON.stringify(PIC))}catch(e){}paint()}}
+async function poll(){try{const r=await fetch('results.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();
+ Object.assign(ST,j.status||{});
+ for(const ev in j.placements||{})for(const n in j.placements[ev]){const s=S.find(x=>x.n===n);if(s)s.p[ev-1]=j.placements[ev][n]}
+ render()}catch(e){}}
+document.querySelectorAll('.bn button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();scrollTo(0,0)});
+render();pics();poll();setInterval(poll,60000);
+</script>
 </body>
 </html>
